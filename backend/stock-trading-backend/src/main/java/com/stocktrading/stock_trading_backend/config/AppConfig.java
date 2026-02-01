@@ -36,7 +36,8 @@ public class AppConfig {
                 cfg.setAllowedOrigins(
                         Arrays.asList(
                                 "http://localhost:5173",
-                                "http://localhost:3000"
+                                "http://localhost:3000",
+                                "https://stock-trading-simulation-production.up.railway.app"
                         )
                 );
                 cfg.setAllowedMethods(Collections.singletonList("*")); //can access all http methods due to *
