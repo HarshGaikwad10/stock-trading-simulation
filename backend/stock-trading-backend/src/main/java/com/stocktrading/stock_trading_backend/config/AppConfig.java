@@ -16,39 +16,73 @@ import java.util.Collections;
 
 @Configuration
 public class AppConfig {
+//    @Bean
+//    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
+//        http.sessionManagement(management->management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+//                .authorizeHttpRequests(Authorize->Authorize.requestMatchers("/api/**").authenticated()
+//                        .anyRequest().permitAll())
+//                .addFilterBefore(new JwtTokenValidator(), BasicAuthenticationFilter.class)
+//                .csrf(csrf->csrf.disable())
+//                .cors(cors->cors.configurationSource(corsConfigurationSource()));
+//    return http.build();
+//    }
+
     @Bean
-    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
-        http.sessionManagement(management->management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(Authorize->Authorize.requestMatchers("/api/**").authenticated()
-                        .anyRequest().permitAll())
+    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+                .sessionManagement(management ->
+                        management.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
+                        .requestMatchers("/api/**").authenticated()
+                        .anyRequest().permitAll()
+                )
                 .addFilterBefore(new JwtTokenValidator(), BasicAuthenticationFilter.class)
-                .csrf(csrf->csrf.disable())
-                .cors(cors->cors.configurationSource(corsConfigurationSource()));
-    return http.build();
+                .csrf(csrf -> csrf.disable())
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()));
+
+        return http.build();
     }
 
-    private CorsConfigurationSource corsConfigurationSource() {
-
-        return new CorsConfigurationSource() {
-            @Override
-            public @Nullable CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
-                CorsConfiguration cfg = new CorsConfiguration();
-                cfg.setAllowedOrigins(
-                        Arrays.asList(
-                                "http://localhost:5173",
-                                "http://localhost:3000",
-                                "https://stock-trading-simulation-production.up.railway.app"
-                        )
-                );
-                cfg.setAllowedMethods(Collections.singletonList("*")); //can access all http methods due to *
-                cfg.setAllowCredentials(true);
-                cfg.setExposedHeaders(Arrays.asList("Authorization"));
-                cfg.setAllowedHeaders(Collections.singletonList("*"));
-                cfg.setMaxAge(3600L);
-                return cfg;
-            }
-        };
-    }
-
+//    private CorsConfigurationSource corsConfigurationSource() {
+//
+//        return new CorsConfigurationSource() {
+//            @Override
+//            public @Nullable CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
+//                CorsConfiguration cfg = new CorsConfiguration();
+//                cfg.setAllowedOrigins(
+//                        Arrays.asList(
+//                                "http://localhost:5173",
+//                                "http://localhost:3000",
+//                                "https://stock-trading-simulation-production.up.railway.app"
+//                        )
+//                );
+//                cfg.setAllowedMethods(Collections.singletonList("*")); //can access all http methods due to *
+//                cfg.setAllowCredentials(true);
+//                cfg.setExposedHeaders(Arrays.asList("Authorization"));
+//                cfg.setAllowedHeaders(Collections.singletonList("*"));
+//                cfg.setMaxAge(3600L);
+//                return cfg;
+//            }
+//        };
+//    }
+@Bean
+CorsConfigurationSource corsConfigurationSource() {
+    return request -> {
+        CorsConfiguration cfg = new CorsConfiguration();
+        cfg.setAllowedOrigins(Arrays.asList(
+                "http://localhost:5173",
+                "http://localhost:3000",
+                "https://stock-trading-simulation-production.up.railway.app"
+        ));
+        cfg.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        cfg.setAllowedHeaders(Collections.singletonList("*"));
+        cfg.setExposedHeaders(Arrays.asList("Authorization"));
+        cfg.setAllowCredentials(true);
+        cfg.setMaxAge(3600L);
+        return cfg;
+    };
+}
 
 }
