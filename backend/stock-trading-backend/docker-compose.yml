@@ -1,0 +1,40 @@
+services:
+  mysql:
+    image: mysql:8
+    container_name: mysql-stock
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: stocktrading
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  backend:
+    build:                    # 🔥 THIS WAS MISSING
+      context: .
+      dockerfile: Dockerfile
+    image: stock-trading-backend
+    container_name: stock-backend
+    restart: always
+    depends_on:
+      - mysql
+    ports:
+      - "5456:5456"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/stocktrading
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+
+      SPRING_MAIL_USERNAME: jackryder810@gmail.com
+      SPRING_MAIL_PASSWORD: hxsbszjwduoqlbqg
+
+      STRIPE_API_KEY: your_stripe_key_here
+      RAZORPAY_KEY: rzp_test_S8c981Rl1NNAvu
+      RAZORPAY_SECRET: 0hSK9sTUypKizd8fzBILPD7K
+
+volumes:
+  mysql_data:
