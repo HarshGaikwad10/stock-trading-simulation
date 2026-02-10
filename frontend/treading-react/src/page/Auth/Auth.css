@@ -1,0 +1,33 @@
+.authContainer {
+    height: 100vh;
+    width: 100%;
+    background-image: url("https://zosh-treading.vercel.app/assets/crypto-7678815_1920-Lm8m_thz.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+  }
+  
+  .overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(3, 7, 18, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .authBox {
+  width: 100%;
+  max-width: 1100px;        /* allows wide signup */
+  min-height: 32rem;
+  padding: 2.5rem;
+  border-radius: 14px;
+  margin: 0 1rem;
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(1px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow:
+    0 0 40px rgba(255, 255, 255, 0.15),
+    inset 0 0 20px rgba(255, 255, 255, 0.05);
+}
